@@ -15,7 +15,7 @@ class _ExpensesState extends State<Expenses> {
         title: 'course ',
         amount: 19.9,
         date: DateTime.now(),
-        category: Category.education),
+        category: Category.work),
     Expense(
         title: 'movie ',
         amount: 15.69,
@@ -23,10 +23,24 @@ class _ExpensesState extends State<Expenses> {
         category: Category.leisure)
   ];
 
+  void _openAddExpenseOverlay() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) {
+        return Text('Model bottom sheet');
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('Expense Tracker'),
+        actions: [
+          IconButton(onPressed: _openAddExpenseOverlay, icon: Icon(Icons.add))
+        ],
+      ),
       body: Column(
         children: [
           Text('The Chart'),
