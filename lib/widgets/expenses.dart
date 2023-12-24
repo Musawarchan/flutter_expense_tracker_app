@@ -28,7 +28,7 @@ class _ExpensesState extends State<Expenses> {
     showModalBottomSheet(
       context: context,
       builder: (ctx) {
-        return NewExpense();
+        return const NewExpense();
       },
     );
   }
@@ -37,14 +37,15 @@ class _ExpensesState extends State<Expenses> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Expense Tracker'),
+        title: const Text('Expense Tracker'),
         actions: [
-          IconButton(onPressed: _openAddExpenseOverlay, icon: Icon(Icons.add))
+          IconButton(
+              onPressed: _openAddExpenseOverlay, icon: const Icon(Icons.add))
         ],
       ),
       body: Column(
         children: [
-          Text('The Chart'),
+          const Text('The Chart'),
           Expanded(child: ExpensesList(expenses: _registeredExpense)),
         ],
       ),
