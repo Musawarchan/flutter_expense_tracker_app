@@ -1,3 +1,4 @@
+import 'package:expense_tracker_app/main.dart';
 import 'package:expense_tracker_app/widgets/expense_list/expenses_list.dart';
 import 'package:expense_tracker_app/models/expense.dart';
 import 'package:expense_tracker_app/widgets/new_expense.dart';
@@ -26,6 +27,7 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (ctx) {
         return NewExpense(
@@ -41,8 +43,40 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+  void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpense.indexOf(expense);
+    setState(() {
+      _registeredExpense.remove(expense);
+    });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 2),
+        content: Text('Expenses deleted '),
+        action: SnackBarAction(
+            label: 'undo',
+            onPressed: () {
+              setState(() {
+                _registeredExpense.insert(expenseIndex, expense);
+              });
+            }),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = Center(
+      child: Text('no expenses . Start adding some!'),
+    );
+
+    if (_registeredExpense.isNotEmpty) {
+      mainContent = ExpensesList(
+        expenses: _registeredExpense,
+        onRemoveExpense: _removeExpense,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expense Tracker'),
@@ -54,7 +88,7 @@ class _ExpensesState extends State<Expenses> {
       body: Column(
         children: [
           const Text('The Chart'),
-          Expanded(child: ExpensesList(expenses: _registeredExpense)),
+          Expanded(child: mainContent),
         ],
       ),
     );
